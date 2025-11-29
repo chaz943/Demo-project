@@ -128,9 +128,9 @@ void sendThingSpeak(float binDistance, bool plasticDetected, bool lidOpenLocal, 
   if (httpCode > 0) {
     // optional: read response
     String payload = http.getString();
-    Serial1.printf("[TS] update code=%d response=%s\n", httpCode, payload.c_str());
+    Serial1.print("[TS] update code=%d response=%s\n", httpCode, payload.c_str());
   } else {
-    Serial1.printf("[TS] update failed, error: %s\n", http.errorToString(httpCode).c_str());
+    Serial1.print("[TS] update failed, error: %s\n", http.errorToString(httpCode).c_str());
   }
   http.end();
 }
@@ -176,7 +176,7 @@ void setup() {
 
   // WiFi
   WiFi.begin(WIFI_SSID, WIFI_PASS);
-  Serial1.printf("Connecting to WiFi: %s\n", WIFI_SSID);
+  Serial1.print("Connecting to WiFi: %s\n", WIFI_SSID);
   unsigned long start = millis();
   while (WiFi.status() != WL_CONNECTED && (millis() - start) < 15000UL) {
     delay(250);
@@ -184,7 +184,7 @@ void setup() {
   }
   if (WiFi.status() == WL_CONNECTED) {
     Serial1.println("\nWiFi connected.");
-    Serial1.printf("IP: %s\n", WiFi.localIP().toString().c_str());
+    Serial1.print("IP: %s\n", WiFi.localIP().toString().c_str());
     lcd.clear();
     lcd.setCursor(0,0);
     lcd.print("WiFi: Connected");
@@ -248,15 +248,22 @@ void loop() {
     lcd.clear();
     lcd.setCursor(0,0);
     if (binDist > 0) {
-      lcd.printf("Bin: %.1fcm ", binDist);
+      lcd.print("Bin: ");
+      lcd.print(binDist, 1);
+      lcd.print("cm ");
     } else {
       lcd.print("Bin: ---cm ");
     }
     lcd.setCursor(0,1);
-    lcd.printf("P:%d L:%d M:%d", plasticPresent ? 1 : 0, lidOpen ? 1 : 0, motorRunning ? 1 : 0);
+    lcd.print("P:");
+    lcd.print(plasticPresent ? 1 : 0);
+    lcd.print(" L:");
+    lcd.print(lidOpen ? 1 : 0);
+    lcd.print(" M:");
+    lcd.print(motorRunning ? 1 : 0);
 
     // Virtual terminal prints (Proteus)
-    Serial1.printf("BIN_DIST: %.2f cm | PLASTIC_DIST: %.2f cm | PLASTIC: %d | IR:%d | LID:%d | MOTOR:%d\n",
+    Serial1.print("BIN_DIST: %.2f cm | PLASTIC_DIST: %.2f cm | PLASTIC: %d | IR:%d | LID:%d | MOTOR:%d\n",
                    binDist, plasticDist, plasticPresent ? 1 : 0, irVal, lidOpen ? 1 : 0, motorRunning ? 1 : 0);
 
     // store for ThingSpeak

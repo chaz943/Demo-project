@@ -1,0 +1,9 @@
+{
+	"folders": [],
+	"settings": {
+		"files.associations": {
+			"string_view": "cpp",
+			"charconv": "cpp"
+		}
+	}
+}
